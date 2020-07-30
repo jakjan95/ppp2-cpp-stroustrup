@@ -1,36 +1,34 @@
 #pragma once
 #include <string>
 
-class Link {
+class SingleLink {
 public:
     std::string value;
-    Link(const std::string& v, Link* p = nullptr, Link* s = nullptr)
-        : value{v} , prev{p}, succ{s} {}
+    SingleLink(const std::string& v, SingleLink* s = nullptr)
+        : value{v}, succ{s} {}
 
     //Insert n before current
-    Link* insert(Link* n);
+    SingleLink* insert(SingleLink* n);
     //Insert n after current
-    Link* add(Link* n);
+    SingleLink* add(SingleLink* n);
     //Erase current
-    Link* erase();
+    SingleLink* erase();
     //Find s in list
-    Link* find(const std::string& s);
+    SingleLink* find(const std::string& s);
     //Find s in const list
-    const Link* find(const std::string& s) const;
+    const SingleLink* find(const std::string& s) const;
 
     //Move current by n-hops
-    Link* advance(int n) const;
+    SingleLink* advance(int n) const;
 
-    Link* next() const { return succ; }
-    Link* previous() const { return prev; }
+    SingleLink* next() const { return succ; }
 
 private:
-    Link* prev;
-    Link* succ;
+    SingleLink* succ;
 };
 
 //----------------------------------------------
-Link* Link::insert(Link* n) {
+SingleLink* SingleLink::insert(SingleLink* n) {
     if (!n) {
         return this;
     }
@@ -38,39 +36,25 @@ Link* Link::insert(Link* n) {
         return n;
     }
     n->succ = this;
-
-    if (prev) {
-        prev->succ = n;
-    }
-
-    n->prev = prev;
-    prev = n;
-
     return n;
 }
 //----------------------------------------------
 //Insert n after current
-Link* Link::add(Link* n) {
+SingleLink* SingleLink::add(SingleLink* n) {
     if (!n) {
         return this;
     }
     if (!this) {
         return n;
     }
-    n->prev = this;
-
-    if (succ) {
-        succ->prev = n;
-    }
-
-    n->succ = succ;
+    //n->succ = succ;
     succ = n;
     return n;
 }
 
 //----------------------------------------------
-Link* Link::find(const std::string& s) {
-    Link* ptr = this;
+SingleLink* SingleLink::find(const std::string& s) {
+    SingleLink* ptr = this;
     while (ptr) {
         if (ptr->value == s) {
             return ptr;
@@ -82,7 +66,7 @@ Link* Link::find(const std::string& s) {
 
 //Exercise 12:
 //We define this in order to have possibility finding items in const list
-const Link* Link::find(const std::string& s) const {
+const SingleLink* SingleLink::find(const std::string& s) const {
     if (value == s) {
         return this;
     } else if (succ) {
@@ -92,29 +76,21 @@ const Link* Link::find(const std::string& s) const {
 }
 
 //----------------------------------------------
-Link* Link::erase() {
+SingleLink* SingleLink::erase() {
     if (succ) {
-        succ->prev = prev;
+        succ = nullptr;
     }
-    if (prev) {
-        prev->succ = succ;
-    }
+
     return succ;
 }
 //----------------------------------------------
 //Move current by n-hops
-Link* Link::advance(int n) const {
+SingleLink* SingleLink::advance(int n) const {
     if (n > 0) {
         if(!succ){
             return nullptr;
         }
         return succ->advance(--n);
-    } else if (n < 0) {
-        if(!prev){
-            return nullptr;
-        }
-        return succ->advance(++n);
     }
-
-    return const_cast<Link*>(this);
+    return const_cast<SingleLink*>(this);
 }
