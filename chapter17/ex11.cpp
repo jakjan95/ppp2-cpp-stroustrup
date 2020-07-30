@@ -51,5 +51,10 @@ int main() {
     print_all(norse_gods);
     print_all(greek_gods);
 
+    Link* p3 = greek_gods->find("Poseidon");
+    std::cout << "p3 before advance: " << p3->value << '\n';
+    p3 = p3->advance(1);
+    std::cout << "p3 after advance(1): " << p3->value << '\n';
+
     return 0;
 }

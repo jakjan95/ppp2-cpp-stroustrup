@@ -19,7 +19,7 @@ public:
     const Link* find(const std::string& s) const;
 
     //Move current by n-hops
-    const Link* advance(int n) const;
+    Link* advance(int n) const;
 
     Link* next() const { return succ; }
     Link* previous() const { return prev; }
@@ -103,9 +103,7 @@ Link* Link::erase() {
 }
 //----------------------------------------------
 //Move current by n-hops
-const Link* Link::advance(int n) const {
-    //Link* ptr = this;
-
+Link* Link::advance(int n) const {
     if (n > 0) {
         if(!succ){
             return nullptr;
@@ -118,5 +116,5 @@ const Link* Link::advance(int n) const {
         return succ->advance(++n);
     }
 
-    return this;
+    return const_cast<Link*>(this);
 }
